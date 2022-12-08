@@ -2,7 +2,7 @@
 // https://www.youtube.com/watch?v=Bagc1ug5rLI&t=1145s
 import "./App.css";
 import { useEffect, useState } from "react";
-import axios  from 'axios'
+// import axios  from 'axios'
 function App() {
   const [loading, setloading] = useState(false);
   const [orderAmount, setorderAmount] = useState(0);
@@ -40,16 +40,16 @@ function App() {
 
     document.body.appendChild(script);
   };
-  const click_2 = async (req,res) => {
+  const click_2 = async (req, res) => {
     const data = await fetch(`${host}/create-order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         amount: orderAmount + "00",
       },
-      body:JSON.stringify({ orderAmount:orderAmount+"00" }),
+      body: JSON.stringify({ orderAmount: orderAmount + "00" }),
     });
-   
+
     const prob = await data.json();
     console.log(prob);
     console.log("the prob one");
@@ -69,9 +69,8 @@ function App() {
       name: "example",
       desciption: "blah",
       order_id: prob.id,
-      
-      handler: async function (response) {
 
+      handler: async function (response) {
         // console.log("hit")
         // const result=await axios.post(`${host}/pay-order`,{
         //     amount: orderAmount,
@@ -92,31 +91,34 @@ function App() {
         //   alert(response.error.metadata.order_id);
         //   alert(response.error.metadata.payment_id);
         // }
-        
-        
-        const result = await fetch(`${host}/pay-order`, {  
+
+        const result = await fetch(`${host}/pay-order`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             amount: orderAmount,
-            razorpayPaymentId : response.razorpay_payment_id,
+            razorpayPaymentId: response.razorpay_payment_id,
             razorpayOrderId: response.razorpay_order_id,
             razorpaySignature: response.razorpay_signature,
-            
           },
-          body:JSON.stringify({amount: orderAmount,razorpayOrderId: response.razorpay_order_id,razorpaySignature: response.razorpay_signature,razorpayPaymentId:response.razorpay_payment_id})
+          body: JSON.stringify({
+            amount: orderAmount,
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature,
+            razorpayPaymentId: response.razorpay_payment_id,
+          }),
         });
-        const tetra=await result.json()
-        alert(tetra.msg)
-       
+        const tetra = await result.json();
+        alert(tetra.msg);
+
         fetchOrders();
       },
-     
+
       prefill: {
         name: "",
         email: "",
         contact: "",
-        branch:""
+        branch: "",
       },
       notes: {
         address: "as",
@@ -124,10 +126,8 @@ function App() {
       theme: {
         color: "#3399cc",
       },
-      allow_rotation:true,
-      send_sms_hash:true,
-
-
+      allow_rotation: true,
+      send_sms_hash: true,
     };
     setloading(false);
     const paymentObject = new window.Razorpay(options);
@@ -135,12 +135,11 @@ function App() {
   };
 
   const fetchOrders = async (req, res) => {
-    console.log("fetch orders")
+    console.log("fetch orders");
     const data = await fetch(`${host}/list-orders`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-   
       },
     });
     const json = await data.json();
@@ -151,9 +150,9 @@ function App() {
   return (
     <>
       <div>
-        <h1>Razorpay</h1>
+        <h1>Welcome to the coffeeshop</h1>
         <hr />
-        <h2>pay orders</h2>
+        <h2>Enter the amount here </h2>
         <label>
           Amount:{""}
           <input
@@ -181,16 +180,16 @@ function App() {
           </thead>
           <tbody>
             {
-              
-              orders.map = ((x) => {
-              
-                return
-                <tr key={x.id}>
-                  <td>{x._id}</td>
-                  <td>{x.amount / 100}</td>
-                  <td>{x.ispaid ? "YES" : "NO"}</td>
-                  <td>{x.razorpay.paymentId}</td>
-                </tr>;
+              orders.map ((x) => {
+                
+                  return <tr key={x.id}>
+                    <td>{x._id}</td>
+                    <td>{x.amount / 100}</td>
+                    <td>{x.ispaid ? "YES" : "NO"}</td>
+                    <td>{x.razorpay.paymentId}</td>
+                  </tr>
+                  ;
+                
               })
             }
           </tbody>

@@ -44,7 +44,7 @@ router.post('/pay-order',async(req,res)=>{
         
         const newPayment=Order({
             isPaid:true,
-            amount:amount,
+            amount:amount*100,
             razorpay:{
                 orderId:razorpayOrderId,
                 paymentId:razorpayPaymentId,
